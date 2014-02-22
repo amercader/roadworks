@@ -3,14 +3,12 @@ $(document).ready(function(){
 
   var queries = {
     counts: 'SELECT COUNT(phaseTypeRef),phaseTypeRef FROM roadworks GROUP BY phaseTypeRef',
-
-
     plannedWorks: 'SELECT * FROM roadworks WHERE phasetyperef = \'Future\'',
     currentWorks: 'SELECT * FROM roadworks WHERE phasetyperef = \'Current\'',
     currentWorksPastTime: 'SELECT COUNT(*), (planned_endtime > NOW()) AS on_time FROM roadworks WHERE phasetyperef = \'Current\' GROUP BY (planned_endtime > NOW())',
-    plannedWorksPastTime: 'SELECT COUNT(*), (planned_starttime > NOW()) AS on_time FROM roadworks WHERE phasetyperef = \'Future\' GROUP BY (planned_starttime > NOW())'
-
-
+    plannedWorksPastTime: 'SELECT COUNT(*), (planned_starttime > NOW()) AS on_time FROM roadworks WHERE phasetyperef = \'Future\' GROUP BY (planned_starttime > NOW())',
+    topContractors: 'SELECT DISTINCT(contractor), COUNT(contractor) FROM roadworks GROUP BY contractor ORDER BY COUNT(contractor) DESC LIMIT 10',
+    topContractorsPastTime: 'SELECT DISTINCT(contractor), COUNT(contractor) FROM roadworks WHERE phasetyperef = \'Current\' AND planned_endtime < NOW() GROUP BY contractor ORDER BY COUNT(contractor) DESC LIMIT 10'
   }
 
   function buildPieChartFromResult(id, result) {
@@ -74,6 +72,24 @@ $(document).ready(function(){
   // Get planned works on time
   $.getJSON(baseSQLAPI + queries.plannedWorksPastTime, function(result) {
     buildPieChartFromResult('#planned-graph', result);
+  });
+
+  // Get top contractors
+  $.getJSON(baseSQLAPI + queries.topContractors, function(result) {
+    $.each(result.rows, function(i, row) {
+      $('#top-contractors-table').find('tbody').append(
+        '<tr><td>' + row.contractor + '</td><td>' + row.count + '</td></tr>'
+      );
+    });
+  });
+
+  // Get top contractors with works past time
+  $.getJSON(baseSQLAPI + queries.topContractorsPastTime, function(result) {
+    $.each(result.rows, function(i, row) {
+      $('#top-contractors-late-table').find('tbody').append(
+        '<tr><td>' + row.contractor + '</td><td>' + row.count + '</td></tr>'
+      );
+    });
   });
 
   return

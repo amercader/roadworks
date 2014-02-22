@@ -15,7 +15,6 @@
       text-align: center;
     }
 
-
     .map-controls {
       padding: 20px;
     }
@@ -35,6 +34,13 @@
 
     #dashboard > div {
       text-align: center;
+    }
+
+    #dashboard .row {
+      margin-top: 30px;
+    }
+
+    #dashboard .caption {
       font-size: 32px;
     }
 
@@ -55,6 +61,14 @@
       padding: 3px;
     }
 
+    #dashboard .table {
+      width: 400px;
+      padding: 0 30px;
+      margin-right: auto;
+      margin-left: auto;
+
+    }
+
     .map-controls {
       margin-top: 30px;
     }
@@ -63,23 +77,46 @@
 </head>
 <body>
 
-  <h1>Roadworks Explorer</h1>
+  <h1>Roadworks Dashboard</h1>
 
-  <div id="dashboard" class="row">
-    <div class="col-md-6">
-      <div class="caption">
-        <span id="current-value" class="value">XX</span> roadworks under way
+  <div id="dashboard">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="caption">
+          <span id="current-value" class="value">XX</span> roadworks under way
+        </div>
+
+        <div class="graph" id="current-graph"></div>
       </div>
+      <div class="col-md-6">
+        <div class="caption">
+          <span id="planned-value" class="value">XX</span> roadworks planned
+        </div>
 
-      <div class="graph" id="current-graph"></div>
-    </div>
-    <div class="col-md-6">
-      <div class="caption">
-        <span id="planned-value" class="value">XX</span> roadworks planned
+        <div class="graph" id="planned-graph"></div>
       </div>
-
-      <div class="graph" id="planned-graph"></div>
     </div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="caption">Top contractors</div>
+        <div class="table">
+          <table class="table table-striped" id="top-contractors-table">
+            <thead><th>Contractor</th><th># of works</th></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="caption">Top contractors with works past time</div>
+        <div class="table">
+          <table class="table table-striped" id="top-contractors-late-table">
+            <thead><th>Contractor</th><th># of works</th></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
   </div>
 
 
