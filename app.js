@@ -92,7 +92,6 @@ $(document).ready(function(){
     });
   });
 
-  return
   var map;
 
   map = new L.Map('map', {
