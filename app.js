@@ -1,13 +1,83 @@
 $(document).ready(function(){
+  var baseSQLAPI = 'http://amercader.cartodb.com/api/v2/sql?q=';
 
   var queries = {
-    planned_works: 'SELECT * FROM roadworks WHERE phasetyperef = \'Future\'',
-    current_works: 'SELECT * FROM roadworks WHERE phasetyperef = \'Current\'',
+    counts: 'SELECT COUNT(phaseTypeRef),phaseTypeRef FROM roadworks GROUP BY phaseTypeRef',
 
+
+    plannedWorks: 'SELECT * FROM roadworks WHERE phasetyperef = \'Future\'',
+    currentWorks: 'SELECT * FROM roadworks WHERE phasetyperef = \'Current\'',
+    currentWorksPastTime: 'SELECT COUNT(*), (planned_endtime > NOW()) AS on_time FROM roadworks WHERE phasetyperef = \'Current\' GROUP BY (planned_endtime > NOW())',
+    plannedWorksPastTime: 'SELECT COUNT(*), (planned_starttime > NOW()) AS on_time FROM roadworks WHERE phasetyperef = \'Future\' GROUP BY (planned_starttime > NOW())'
 
 
   }
 
+  function buildPieChartFromResult(id, result) {
+    var worksOnTime = (result.rows[0].on_time) ? result.rows[0].count : result.rows[1].count;
+    var worksPastTime = (result.rows[0].on_time) ? result.rows[1].count : result.rows[0].count;
+    var data = [
+      {label: 'On time', data: worksOnTime, color: '#229a00'},
+      {label: 'Past time', data: worksPastTime, color: '#f84f40'}
+    ];
+    buildPieChart(id, data);
+  }
+  function buildPieChart(id, data) {
+
+    function labelFormatter(label, series) {
+      return "<div class='pieLabelCustom'>" + label + "<div>" + Math.round(series.percent) + "%</div></div>";
+    }
+
+    $.plot(id, data, {
+      series: {
+        pie: {
+          show: true,
+          radius: 1,
+          label: {
+              show: true,
+              radius: 0.5,
+              formatter: labelFormatter,
+              background: {
+                opacity: 0.5,
+                color: '#FFFFFF'
+              }
+
+          }
+        }
+      },
+      legend: {
+        show: false
+      }
+    });
+  }
+
+  // Get global counts
+  $.getJSON(baseSQLAPI + queries.counts, function(result) {
+
+    var data = [];
+    var row;
+    for (var i = 0; i < result.rows.length; i++) {
+      row = result.rows[i];
+      if (row.phasetyperef == 'Current') {
+        $('#current-value').html(row.count);
+      } else if (row.phasetyperef == 'Future') {
+        $('#planned-value').html(row.count);
+      }
+
+    }
+  });
+
+  // Get current works on time
+  $.getJSON(baseSQLAPI + queries.currentWorksPastTime, function(result) {
+    buildPieChartFromResult('#current-graph', result);
+  });
+
+  // Get planned works on time
+  $.getJSON(baseSQLAPI + queries.plannedWorksPastTime, function(result) {
+    buildPieChartFromResult('#planned-graph', result);
+  });
+
+  return
   var map;
 
   map = new L.Map('map', {
@@ -36,7 +106,7 @@ $(document).ready(function(){
    .on('done', function(layer) {
     // change the query for the first layer
     var subLayerOptions = {
-      sql: queries.current_works
+      sql: queries.currentWorks
 //          cartocss: "#roadworks{marker-fill: #109DCD; marker-width: 5; marker-line-color: white; marker-line-width: 0;}"
     }
 
@@ -49,11 +119,11 @@ $(document).ready(function(){
   });
 
   $('#planned').click(function(){
-    l.setSQL(queries.planned_works);
+    l.setSQL(queries.plannedWorks);
   });
 
   $('#current').click(function(){
-    l.setSQL(queries.current_works);
+    l.setSQL(queries.currentWorks);
   });
 
 });
