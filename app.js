@@ -25,7 +25,7 @@ $(document).ready(function(){
   function buildPieChart(id, data) {
 
     function labelFormatter(label, series) {
-      return "<div class='pieLabelCustom'>" + label + "<div>" + Math.round(series.percent) + "%</div></div>";
+      return "<div class='pieLabelCustom'>" + label + " (" + Math.round(series.percent) + "%)</div>";
     }
 
     $.plot(id, data, {
@@ -34,19 +34,18 @@ $(document).ready(function(){
           show: true,
           radius: 1,
           label: {
-              show: true,
+              show: false,
               radius: 0.5,
-              formatter: labelFormatter,
               background: {
                 opacity: 0.5,
                 color: '#FFFFFF'
               }
-
           }
         }
       },
       legend: {
-        show: false
+        show: true,
+        labelFormatter: labelFormatter
       }
     });
   }

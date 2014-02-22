@@ -9,6 +9,13 @@
   <![endif]-->
   <style>
     html, body {width:100%; height:100%; padding: 0; margin: 0;}
+
+    h1 {
+      font-size: 50px;
+      text-align: center;
+    }
+
+
     .map-controls {
       padding: 20px;
     }
@@ -36,14 +43,20 @@
       font-weight: bold;
     }
     #dashboard .graph {
-      height: 300px;
+      height: 200px;
+      width: 400px;
+      margin-right: auto;
+      margin-left: auto;
+      margin-top: 30px;
     }
 
     .pieLabelCustom {
       font-size: 20px;
       padding: 3px;
-      -moz-border-radius: 15px;
-      border-radius: 15px;
+    }
+
+    .map-controls {
+      margin-top: 30px;
     }
 
   </style>
@@ -59,7 +72,6 @@
       </div>
 
       <div class="graph" id="current-graph"></div>
-
     </div>
     <div class="col-md-6">
       <div class="caption">
@@ -68,9 +80,6 @@
 
       <div class="graph" id="planned-graph"></div>
     </div>
-
-    </div>
-
   </div>
 
 
