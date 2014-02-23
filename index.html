@@ -78,12 +78,24 @@
       margin-top: 30px;
     }
 
+    #disclaimer {
+      width: 50%;
+      margin-left: auto;
+      margin-right: auto;
+    }
   </style>
 </head>
 <body>
 
   <h1>Roadworks Dashboard</h1>
 
+  <div id="disclaimer" class="well">
+    This is a prototype made by <a href="https://twitter.com/amercader">@amercader</a>
+    with roadworks data from <a href="https://www.netraveldata.co.uk/">Newcastle City Council</a>,
+    hosted on <a href="https://cartodb.com">CartoDB</a>.
+    The data is not up to date, it's just a snapshot created on 22/02/2014 for the <a href="https://twitter.com/sparksnortheast">Sparks Open Data Day Hack 2014</a>.
+    Source on <a href="https://github.com/amercader/roadworks">GitHub</a>
+  </div>
   <div id="dashboard">
     <div class="row">
       <div class="col-md-6">
@@ -134,12 +146,6 @@
   </div>
   <div id='map'></div>
 
-
-  <div class='footer'>Made by <a href="https://twitter.com/amercader">@amercader</a>
-           with data from <a href="https://www.netraveldata.co.uk/">Newcastle City Council</a>,
-            hosted on <a href="https://cartodb.com">CartoDB</a>.
-            Source on <a href="https://github.com/amercader/roadworks">GitHub</a>
- </div>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
   <script src="js/jquery.flot.min.js"></script>
   <script src="js/jquery.flot.pie.min.js"></script>
